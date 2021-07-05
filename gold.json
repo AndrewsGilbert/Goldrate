@@ -1,0 +1,28 @@
+{
+  "1": {
+    "goldpricesindia": {
+      "Rate": 4775,
+      "Date": 5,
+      "Time": 9,
+      "Min": 35,
+      "Month": 6,
+      "year": 2021
+    },
+    "gadgets": {
+      "Rate": 4759,
+      "Date": 5,
+      "Time": 9,
+      "Min": 36,
+      "Month": 6,
+      "year": 2021
+    },
+    "economictimes": {
+      "Rate": 4729.1,
+      "Date": 5,
+      "Time": 9,
+      "Min": 37,
+      "Month": 6,
+      "year": 2021
+    }
+  }
+}
