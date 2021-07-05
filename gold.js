@@ -2,7 +2,6 @@ const express = require('express')
 const fs = require('fs')
 const request = require('request')
 const cheerio = require('cheerio')
-const url = 'https://www.goldpricesindia.com'
 const app = express()
 const nodemailer = require('nodemailer')
 const cron = require('node-cron')
@@ -15,65 +14,104 @@ const sender = nodemailer.createTransport({
   }
 })
 
-const calender = new Date()
-const hour = calender.getHours()
 
-cron.schedule('30 9,17 * * *', function () {
-  request(url, function (err, resp, html) {
-    if (!err && resp.statusCode === 200) {
-      const $ = cheerio.load(html)
-      const dataPath = $('.rate')
-      const data = dataPath.text()
-      const goldRate = Number(data.replace(/,/g, '')) / 10
 
-      const content = fs.readFileSync('gold.txt', 'utf8')
-      const goldObject = JSON.parse(content)
-      const keys = Object.keys(goldObject)
-      const keysLength = keys.length
-      let nextKey = ''
+cron.schedule('35,36,37 9,16 * * *', function () {
 
-      if (hour === 10) {
-        nextKey = Number(keys[keysLength - 1]) + 1
-        goldObject[nextKey] = goldRate
-        if (keysLength === 2) {
-          delete goldObject[nextKey - 2]
+    const calender = new Date()
+    const hour = calender.getHours()
+    const min = calender.getMinutes()
+    const date = calender.getDate()
+    const month = calender.getMonth()
+    const year = calender.getFullYear()
+
+    const urlContent =  fs.readFileSync('web.json', 'utf8')
+    const urlObject = JSON.parse(urlContent)
+    const urlWeb = Object.keys(urlObject)
+    const urlCount = urlWeb.length
+    var detail = {}
+    var childId = {}
+    var goldRate =''
+    var webId =''
+
+    for ( web in urlObject ) {
+
+        if( web === 'goldpricesindia' && min === 35) {
+
+            const url = urlObject[web]
+            webId = web
+
+            request(url, function (err, resp, html) { 
+                if (!err && resp.statusCode === 200) {
+                    const $ = cheerio.load(html)
+                    const dataPath = $('.rate')
+                    const data = dataPath.text()
+                    goldRate = Number(data.replace(/,/g, '')) / 10
+                    process()
+                }
+           })        
         }
-      } else if (hour === 17) {
-        nextKey = Number(keys[keysLength - 1])
-        goldObject[nextKey] = goldRate
-      }
+        if( web === 'gadgets' && min === 36) {
 
-      fs.writeFileSync('gold.txt', JSON.stringify(goldObject, null, 2), 'utf8')
+            const url = urlObject[web]
+            webId = web
 
-      const oldRate = goldObject[nextKey - 1]
-      const lessRate = Math.min(oldRate, goldRate)
-      let result = ''
-
-      if (lessRate === goldRate) {
-        const difference = oldRate - goldRate
-        result = 'Today gold rate get reduced by  ' + difference + 'rs/gm' + '\r\n' + 'You can buy gold !'
-      } else if (lessRate === oldRate) {
-        const difference = goldRate - oldRate
-        result = 'Today gold rate get increased by  ' + difference + 'rs/gm' + '\r\n' + 'You can sell gold !'
-      }
-
-      const composeMail = {
-        from: 'andrewsgilbert95@gmail.com',
-        to: 'andrewsgilbert95@gmail.com',
-        subject: 'Gold rate update',
-        text: result
-      }
-      sender.sendMail(composeMail, function (err, info) {
-        if (err) {
-          console.log('error')
-        } else {
-          console.log('mail sent')
+            request(url, function (err, resp, html) {
+                if (!err && resp.statusCode === 200) {
+                    const $ = cheerio.load(html)
+                    const dataPath = $('._cptblwrp table tbody tr:nth-child(3) td._lft')
+                    const data = dataPath.html()
+                    goldRate = Number(data.replace(/₹|,/g, '')) / 10
+                    process()
+                }
+            })
         }
-      })
-    }
-  })
+        if( web === 'economictimes' && min === 37) {
+
+            const url = urlObject[web]
+            webId = web
+
+            request(url, function (err, resp, html) {
+                if (!err && resp.statusCode === 200) {
+                    const $ = cheerio.load(html)
+                    const dataPath = $('.commodityInfoContainer > ul > li.commodityPriceCol > span.commodityPrice')
+                    const data = dataPath.html()
+                     goldRate = Number(data) / 10
+                     process()
+                }
+
+            })
+        }
+        function process(){
+
+            detail["Rate"] = goldRate
+            detail["Date"] = date
+            detail["Time"] = hour
+            detail["Min"] = min
+            detail["Month"] = month
+            detail["year"] = year
+
+            childId[webId] = detail
+
+            const GoldContent = fs.readFileSync('gold.json', 'utf8')
+            const goldObject = JSON.parse(GoldContent)
+            const keys = Object.keys(goldObject)
+            const keysLength = keys.length
+            const index = urlWeb.indexOf(webId)
+            var nextKey = ''
+                    
+            if ( index === 0 && hour == 9 ) {
+                nextKey = keysLength + 1
+                goldObject[nextKey] = childId
+            } else {
+                nextKey = keysLength
+                goldObject[nextKey][webId] = detail
+            }   
+            fs.writeFileSync('gold.json', JSON.stringify(goldObject, null, 2), 'utf8')
+        }
+    }    
 })
 
-app.listen(8587, function () {
-  console.log('Node server is running..')
+app.listen(8586, function () {
+  console.log('Node server is running 8586..')
 })
