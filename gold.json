@@ -1,28 +1,63 @@
 {
-  "1": {
-    "goldpricesindia": {
-      "Rate": 4775,
-      "Date": 5,
-      "Time": 9,
-      "Min": 35,
-      "Month": 6,
-      "year": 2021
+  "web": [
+    {
+      "id": 1,
+      "name": "goldPricesIndia",
+      "url": "https://www.goldpricesindia.com"
     },
-    "gadgets": {
-      "Rate": 4759,
-      "Date": 5,
-      "Time": 9,
-      "Min": 36,
-      "Month": 6,
-      "year": 2021
+    {
+      "id": 2,
+      "name": "gadgets",
+      "url": "https://gadgets.ndtv.com/finance/gold-rate-in-india"
     },
-    "economictimes": {
-      "Rate": 4729.1,
-      "Date": 5,
-      "Time": 9,
-      "Min": 37,
-      "Month": 6,
-      "year": 2021
+    {
+      "id": 3,
+      "name": "economicTimes",
+      "url": "https://economictimes.indiatimes.com/commoditysummary/symbol-GOLD.cms"
     }
-  }
+  ],
+  "goldRate": [
+    {
+      "Rate": 4766,
+      "DAte": "Mon Jul 05 2021",
+      "Time": "22:52:10 GMT+0530 (India Standard Time)",
+      "WebId": 1
+    },
+    {
+      "Rate": 4746,
+      "DAte": "Mon Jul 05 2021",
+      "Time": "22:53:20 GMT+0530 (India Standard Time)",
+      "WebId": 2
+    },
+    {
+      "Rate": 4730.3,
+      "DAte": "Mon Jul 05 2021",
+      "Time": "22:54:20 GMT+0530 (India Standard Time)",
+      "WebId": 3
+    },
+    {
+      "Rate": 4766,
+      "DAte": "Mon Jul 05 2021",
+      "Time": "23:03:50 GMT+0530 (India Standard Time)",
+      "WebId": 1
+    },
+    {
+      "Rate": 4766,
+      "DAte": "Mon Jul 05 2021",
+      "Time": "23:06:50 GMT+0530 (India Standard Time)",
+      "WebId": 1
+    },
+    {
+      "Rate": 4746,
+      "DAte": "Mon Jul 05 2021",
+      "Time": "23:08:40 GMT+0530 (India Standard Time)",
+      "WebId": 2
+    },
+    {
+      "Rate": 4746,
+      "DAte": "Mon Jul 05 2021",
+      "Time": "23:08:50 GMT+0530 (India Standard Time)",
+      "WebId": 2
+    }
+  ]
 }
