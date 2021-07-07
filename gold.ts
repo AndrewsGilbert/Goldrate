@@ -1,11 +1,10 @@
 
-const express = require('express')
-const fs = require('fs')
-const request = require('request')
-const cheerio = require('cheerio')
+import express from 'express'
+import fs from 'fs'
+import request from 'request'
+import cheerio, { Cheerio } from 'cheerio'
 const app = express()
-// const nodemailer = require('nodemailer')
-const cron = require('node-cron')
+import cron from 'node-cron'
 
 type web = {
     id:number
@@ -45,22 +44,24 @@ cron.schedule('5 9-15 * * *', function () {
 
     if (cron.includes(hour)) {
       const webId:number = id
-      request(url, function (err, resp, html) {
+      request(url, function (err ,resp, html) {
         if (!err && resp.statusCode === 200) {
           const $ = cheerio.load(html)
           const dataPath = $(selector)
-          const data:string = dataPath.html()
-          const goldRate:number = Number(data.replace(/₹|,/g, '')) / 10
+          const data: any = dataPath.html()
+          
+          const goldRate: number = Number(data.replace(/₹|,/g, '')) / 10
           let detail = <gold>{}
           detail.Rate = goldRate
           detail.DAte = date
           detail.Time = time
           detail.WebId = webId
-          const index:number = goldObject.length
+          const index: number = goldObject.length
 
           goldObject[index] = detail
 
           fs.writeFileSync('gold.json', JSON.stringify(contentJson, null, 2), 'utf8')
+          
         }
       })
     }
