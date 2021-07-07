@@ -1,0 +1,34 @@
+{
+  "name": "goldrate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gold": "ts-node gold.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndrewsGilbert/Goldrate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndrewsGilbert/Goldrate/issues"
+  },
+  "homepage": "https://github.com/AndrewsGilbert/Goldrate#readme",
+  "dependencies": {
+    "cheerio": "*",
+    "express": "*",
+    "file-system": "*",
+    "node-cron": "*",
+    "request": "*",
+    "ts-node": "*"
+  },
+  "devDependencies": {
+    "@types/express": "*",
+    "@types/node-cron": "*",
+    "@types/request": "*"
+  }
+}
