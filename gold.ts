@@ -5,6 +5,12 @@ import request from 'request'
 import cheerio, { Cheerio } from 'cheerio'
 const app = express()
 import cron from 'node-cron'
+import bodyParser from 'body-parser'
+import path from 'path'
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
 
 type web = {
     id:number
@@ -66,6 +72,40 @@ cron.schedule('5 9-15 * * *', function () {
       })
     }
   }
+})
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, '/home.HTML'))
+})
+
+app.post('/data', function (req, res) {
+  
+  const content:string = fs.readFileSync('gold.json', 'utf8')
+  const contentJson:content = JSON.parse(content)
+  const web:Array<web> = contentJson.web
+  const goldObject: Array<gold> = contentJson.goldRate
+  
+  const id: number = Number(req.body.webId)
+   let webName: string = ''
+
+  for (let i: number = 0; i < web.length; i++) {
+
+    const webId:number = web[i].id
+    if (id !== webId ) { continue }
+    webName = web[i].name
+  }
+  
+  res.write('Prices from ' + webName + '\r\n')
+
+  for (let j: number = 0; j < goldObject.length; j++){
+
+    const webId: number = goldObject[j].WebId
+    if (webId !== id) { continue }
+    const gold:gold = goldObject[j]
+    res.write('\r\n' + 'Gold rate per Gram is: ' + gold.Rate +  ' Rs , Date: ' + gold.DAte + ', at time of ' + gold.Time + '\r\n' )
+  }
+  
+  res.end()
 })
 
 app.listen(8586, function () {
