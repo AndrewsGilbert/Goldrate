@@ -19,10 +19,12 @@
   },
   "homepage": "https://github.com/AndrewsGilbert/Goldrate#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cheerio": "*",
     "express": "*",
     "file-system": "*",
     "node-cron": "*",
+    "path": "^0.12.7",
     "request": "*",
     "ts-node": "*"
   },
